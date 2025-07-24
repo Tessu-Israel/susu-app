@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nkabom – Flip Login</title>
+  <link rel="stylesheet" href="./src/index.css">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#22c55e",
+            "primary-dark": "#15803d",
+            "primary-light": "#bbf7d0",
+          }
+        }
+      }
+    };
+  </script>
+
+<body class="bg-primary-light flex items-center justify-center min-h-screen px-4 font-sans">
+
+  <div class="perspective w-full max-w-4xl">
+    <div class="card grid grid-cols-1 md:grid-cols-2" id="flipCard">
+      
+      <!-- Greeting Side -->
+      <div class="card-face front flex flex-col justify-center items-center text-center p-6 md:col-span-1">
+        <h2 id="greeting" class="text-3xl font-bold mb-2 text-primary-dark">Hello!</h2>
+        <p class="text-gray-700">Welcome back to your Susu world 🌍</p>
+                <button onclick="flipCard()" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Login</button>
+      </div>
+
+      <!-- Login Side -->
+      <div class="card-face back flex flex-col justify-center p-6 md:col-span-1">
+        <h2 class="text-2xl font-bold mb-4 text-center text-primary-dark">Sign in to Nkabom</h2>
+
+        <form id="loginForm" class="space-y-4">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">Username or Email</label>
+            <input id="username" name="username" type="text" required
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm" />
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input id="password" name="password" type="password" required
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm" />
+          </div>
+
+          <div>
+            <label for="role" class="block text-sm font-medium text-gray-700">Login As</label>
+            <select id="role" name="role" required
+              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary sm:text-sm">
+              <option value="">Select Role</option>
+              <option value="admin">Admin</option>
+              <option value="agent">Agent</option>
+            </select>
+          </div>
+
+          <button type="submit"
+            class="w-full py-2 px-4 text-white bg-primary hover:bg-primary-dark font-medium text-sm rounded-lg shadow">
+            Submit
+          </button>
+        </form>
+
+        <p id="loginError" class="text-center text-sm text-red-600 mt-2 hidden">
+          Invalid credentials or missing info.
+        </p>
+
+        <button onclick="flipCard()" class="mt-4 text-sm text-blue-500 hover:underline self-center">
+          Back
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Flip the card
+    function flipCard() {
+      document.getElementById('flipCard').classList.toggle('flip');
+    }
+
+    // Dynamic greeting
+    const greetingEl = document.getElementById('greeting');
+    const hour = new Date().getHours();
+    let greeting = "Hello";
+
+    if (hour < 12) greeting = "Good Morning ☀️";
+    else if (hour < 18) greeting = "Good Afternoon 🌤️";
+    else greeting = "Good Evening 🌙";
+
+    greetingEl.innerText = greeting;
+
+    // Login form logic
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const role = document.getElementById("role").value;
+      const errorElem = document.getElementById("loginError");
+
+      if (!username || !password || !role) {
+        errorElem.classList.remove("hidden");
+        return;
+      }
+
+      const redirect = {
+        admin: "dashboard-admin.html",
+        agent: "dashboard-agent.html",
+      };
+
+      window.location.href = redirect[role];
+    });
+  </script>
+
+</body>
+</html>
